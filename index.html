@@ -6,39 +6,47 @@
     <title>Store Data in Excel</title>
     
     <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
         form {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            max-width: 300px;
+            background-color: #fff;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
         label {
             margin-top: 10px;
+            font-weight: bold;
         }
-        input[type="text"], input[type="email"], input[type="tel"], select {
+        input, select {
             margin-top: 5px;
-            padding: 5px;
+            padding: 10px;
             border-radius: 3px;
             border: 1px solid #ccc;
+            width: 100%;
         }
         input[type="submit"] {
-            margin-top: 10px;
-            padding: 5px 10px;
+            margin-top: 20px;
+            padding: 10px;
             border-radius: 3px;
             border: none;
             background-color: #4CAF50;
             color: white;
             cursor: pointer;
+            width: 100%;
         }
         input[type="submit"]:hover {
             background-color: #3e8e41;
@@ -46,26 +54,28 @@
         .error {
             color: red;
         }
+        #Success {
+            margin-top: 10px;
+            color: #4CAF50;
+        }
     </style>
 </head>
 <body>
     <form name="submit-to-google-sheet" onsubmit="return validateForm()">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name">
-        <label for="hallTicketNo">Hall Ticket No:</label>
-        <input type="text" id="hallTicketNo" name="hallTicketNo" value="21QA1A05">
+        <label>Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label>Hall Ticket No:</label>
+        <input type="text" id="hallTicketNo" name="hallTicketNo" value="21QA1A05" required oninput="this.value = this.value.toUpperCase()">
         <span class="error" id="hallTicketNoError"></span>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email">
-        <label for="mobileNo">Mobile No:</label>
-        <input type="tel" id="mobileNo" name="mobileNo">
-        <label for="gender">Gender:</label>
-        <select id="gender" name="gender">
-          <option value="">Select...</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-          <option value="Prefer not to say">Prefer not to say</option>
+        <label>Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label>Mobile No:</label>
+        <input type="tel" id="mobileNo" name="mobileNo" required maxlength="10">
+        <label>Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="">Select...</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
         </select>
         <input type="submit" value="Submit">
         <span id="Success"></span>
@@ -85,22 +95,29 @@
             }
         }
 
-
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzvc3rNIXSUmjy5CPL1GiHW--GALWhqoSokv-QmcZmJ/dev'
-        const form = document.forms['submit-to-google-sheet']
+       
+        const scriptURL = 'https://script.google.com/macros/s/AKfycby_AqWSN_LbxqAcZBQk77xSGiHR4oFvyYHDWVSBj_Nb0UxAqnfsAdJvVeGHLubeZx5YFg/exec';
+        const form = document.forms['submit-to-google-sheet'];
+        const Success = document.getElementById("Success");
 
         form.addEventListener('submit', e => {
-            e.preventDefault()
-            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => {
-                document.getElementById("Success").innerHTML = "Successfully submitted!";
-            })
-            .catch(error => console.error('Error!', error.message))
-        })
-
-
-
-
+            e.preventDefault();
+            if (validateForm()) {
+                Success.innerHTML = "Submitting...";
+                fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(response => {
+                    Success.innerHTML = "Successfully submitted!";
+                    setTimeout(function() {
+                        Success.innerHTML = ""; 
+                    }, 5000);
+                    form.reset();
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    Success.innerHTML = "Submission failed. Please try again.";
+                });
+            }
+        });
     </script>
 </body>
 </html>
