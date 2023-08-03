@@ -1,107 +1,19 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <style>
-        /* You can add your own CSS style here */
-        h1 {
-            text-align: center;
-        }
-
-        form {
-            margin: 0 auto;
-            width: 50%;
-        }
-
-        label {
-            display: block;
-            margin: 10px 0;
-        }
-
-        input, select {
-            width: 100%;
-        }
-
-        button {
-            display: block;
-            margin: 20px auto;
-        }
-    </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script>
-        // You can add your own JavaScript code here
-        $(document).ready(function() {
-            // Validate the user input and show an alert if there is an error
-            function validate() {
-                var name = $("#name").val();
-                var hall = $("#hall").val();
-                var email = $("#email").val();
-                var mobile = $("#mobile").val();
-                var regexName = /^[a-zA-Z ]+$/; // Only letters and spaces are allowed
-                var regexHall = /^[0-9]+$/; // Only numbers are allowed
-                var regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/; // A valid email format
-                var regexMobile = /^[0-9]{10}$/; // A valid mobile number with 10 digits
-                if (!name || !hall || !email || !mobile) {
-                    alert("Please fill all the fields");
-                    return false;
-                }
-                if (!regexName.test(name)) {
-                    alert("Please enter a valid name");
-                    return false;
-                }
-                if (!regexHall.test(hall)) {
-                    alert("Please enter a valid hall ticket number");
-                    return false;
-                }
-                if (!regexEmail.test(email)) {
-                    alert("Please enter a valid email id");
-                    return false;
-                }
-                if (!regexMobile.test(mobile)) {
-                    alert("Please enter a valid mobile number");
-                    return false;
-                }
-                return true;
-            }
-
-            // Send the user input data to the PHP script using AJAX
-            function submit() {
-                var name = $("#name").val();
-                var hall = $("#hall").val();
-                var email = $("#email").val();
-                var mobile = $("#mobile").val();
-                $.ajax({
-                    url: "save.php", // The name of your PHP script
-                    type: "POST", // The method of sending data
-                    data: {name: name, hall: hall, email: email, mobile: mobile}, // The data to send
-                    success: function(response) { // The function to execute when the request is successful
-                        alert(response); // Show the response from the PHP script
-                    },
-                    error: function(xhr, status, error) { // The function to execute when the request fails
-                        alert("An error occurred: " + error); // Show the error message
-                    }
-                });
-            }
-
-            // Attach the validate and submit functions to the submit button
-            $("#submit").click(function() {
-                if (validate()) {
-                    submit();
-                }
-            });
-        });
-    </script>
+    <title>Store Data in Excel</title>
 </head>
 <body>
-    <h1>Simple Website</h1>
-    <form>
+    <form method="post" action="storeData.php">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" placeholder="Enter your name">
-        <label for="hall">Hall Ticket Number:</label>
-        <input type="text" id="hall" name="hall" placeholder="Enter your hall ticket number">
-        <label for="email">Email ID:</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email id">
-        <label for="mobile">Mobile Number:</label>
-        <input type="text" id="mobile" name="mobile" placeholder="Enter your mobile number">
-        <button type="button" id="submit" name="submit">Submit</button>
+        <input type="text" id="name" name="name"><br><br>
+        <label for="hallTicketNo">Hall Ticket No:</label>
+        <input type="text" id="hallTicketNo" name="hallTicketNo"><br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email"><br><br>
+        <label for="mobileNo">Mobile No:</label>
+        <input type="tel" id="mobileNo" name="mobileNo"><br><br>
+        <input type="submit" value="Submit">
     </form>
 </body>
 </html>
