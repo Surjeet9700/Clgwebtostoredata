@@ -1,19 +1,103 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Store Data in Excel</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        label {
+            margin-top: 10px;
+        }
+        input[type="text"], input[type="email"], input[type="tel"], select {
+            margin-top: 5px;
+            padding: 5px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border-radius: 3px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
-    <form method="post" action="storeData.php">
+    <form name="submit-to-google-sheet" onsubmit="return validateForm()">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name"><br><br>
+        <input type="text" id="name" name="name">
         <label for="hallTicketNo">Hall Ticket No:</label>
-        <input type="text" id="hallTicketNo" name="hallTicketNo"><br><br>
+        <input type="text" id="hallTicketNo" name="hallTicketNo" value="21QA1A05">
+        <span class="error" id="hallTicketNoError"></span>
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email"><br><br>
+        <input type="email" id="email" name="email">
         <label for="mobileNo">Mobile No:</label>
-        <input type="tel" id="mobileNo" name="mobileNo"><br><br>
+        <input type="tel" id="mobileNo" name="mobileNo">
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender">
+          <option value="">Select...</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+          <option value="Prefer not to say">Prefer not to say</option>
+        </select>
         <input type="submit" value="Submit">
     </form>
+
+    <script>
+        function validateForm() {
+            var hallTicketNo = document.getElementById("hallTicketNo").value;
+            var hallTicketNoError = document.getElementById("hallTicketNoError");
+
+            if (!hallTicketNo.startsWith("21QA1A05")) {
+                hallTicketNoError.textContent = "Hall Ticket No must start with '21QA1A05'";
+                return false;
+            } else {
+                hallTicketNoError.textContent = "";
+                return true;
+            }
+        }
+
+
+        const scriptURL = 'https://script.google.com/macros/s/AKfycby_AqWSN_LbxqAcZBQk77xSGiHR4oFvyYHDWVSBj_Nb0UxAqnfsAdJvVeGHLubeZx5YFg/exec'
+        const form = document.forms['submit-to-google-sheet']
+
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => console.log('Success!', response))
+            .catch(error => console.error('Error!', error.message))
+        })
+
+
+
+
+    </script>
 </body>
 </html>
