@@ -68,6 +68,7 @@
           <option value="Prefer not to say">Prefer not to say</option>
         </select>
         <input type="submit" value="Submit">
+        <span id="Success"></span>
     </form>
 
     <script>
@@ -85,13 +86,15 @@
         }
 
 
-        const scriptURL = 'https://script.google.com/macros/s/AKfycby_AqWSN_LbxqAcZBQk77xSGiHR4oFvyYHDWVSBj_Nb0UxAqnfsAdJvVeGHLubeZx5YFg/exec'
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzvc3rNIXSUmjy5CPL1GiHW--GALWhqoSokv-QmcZmJ/dev'
         const form = document.forms['submit-to-google-sheet']
 
         form.addEventListener('submit', e => {
             e.preventDefault()
             fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => console.log('Success!', response))
+            .then(response => {
+                document.getElementById("Success").innerHTML = "Successfully submitted!";
+            })
             .catch(error => console.error('Error!', error.message))
         })
 
